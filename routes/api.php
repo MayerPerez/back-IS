@@ -33,3 +33,8 @@ Route::post('/user/test/store', [UserController::class, 'storeTest']);
 Route::get('/negocio/test/store', [NegocioController::class, 'storeTest']);
 Route::get('/negocio/create/table', [NegocioController::class, 'createTable']);
 Route::get('/negocio/delete/table', [NegocioController::class, 'dropTable']);
+
+//Rutas para el controlador de productos
+Route::resource("/producto", ProductoController::class)->only([
+    'store', 'storeTest', 'createTable', 'dropTable'
+]);
