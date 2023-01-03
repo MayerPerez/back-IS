@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\NegocioController;
+use App\Http\Controllers\ClienteController;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,3 +37,8 @@ Route::resource("/negocio", NegocioController::class)->only([
 Route::get('/negocio/test/store', [NegocioController::class, 'storeTest']);
 Route::get('/negocio/create/table', [NegocioController::class, 'createTable']);
 Route::get('/negocio/delete/table', [NegocioController::class, 'dropTable']);
+
+Route::resource("/cliente", ClienteController::class)->only([
+    'store', 'update', 'show', 'destroy', 'index'
+]);
+Route::get('/cliente/delete/table', [ClienteController::class, 'dropTable']);
