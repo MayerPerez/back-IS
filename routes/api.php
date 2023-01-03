@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\NegocioController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,3 +29,7 @@ Route::resource("/user", UserController::class)->only([
     'store', 'update', 'show', 'destroy', 'index'
 ]);
 Route::post('/user/test/store', [UserController::class, 'storeTest']);
+
+Route::get('/negocio/test/store', [NegocioController::class, 'storeTest']);
+Route::get('/negocio/create/table', [NegocioController::class, 'createTable']);
+Route::get('/negocio/delete/table', [NegocioController::class, 'dropTable']);
