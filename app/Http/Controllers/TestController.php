@@ -23,7 +23,7 @@ class TestController extends Controller
     {
         try {
             
-            return $this->sendResponse($status, 'Response');
+            return $this->sendResponse(true, 'Response');
         } catch (\Exception $e) {
             return $this->sendError('TestController test', $e->getMessage(), $e->getCode());
         }
