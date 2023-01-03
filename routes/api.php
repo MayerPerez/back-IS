@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TestController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,10 +16,15 @@ use App\Http\Controllers\TestController;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+/*Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
-});
+});*/
 
 Route::post('/test/store', [TestController::class, 'store']);
 Route::get('/test/index', [TestController::class, 'index']);
 Route::get('/test/count', [TestController::class, 'countTables']);
+
+Route::resource("/user", UserController::class)->only([
+    'store', 'update', 'show', 'destroy', 'index'
+]);
+Route::post('/user/test/store', [UserController::class, 'storeTest']);
