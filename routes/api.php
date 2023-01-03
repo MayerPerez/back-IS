@@ -6,6 +6,7 @@ use App\Http\Controllers\TestController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\NegocioController;
 use App\Http\Controllers\ClienteController;
+use App\Http\Controllers\ProductoController;
 
 /*
 |--------------------------------------------------------------------------

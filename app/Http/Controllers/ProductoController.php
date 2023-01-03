@@ -22,7 +22,7 @@ class ProductoController extends Controller
     public function store(Request $request)
     {
         try {
-            if (!Schema::hasTable('prodcutos')) {
+            if (!Schema::hasTable('productos')) {
                 $this->createTable();
             }
 
