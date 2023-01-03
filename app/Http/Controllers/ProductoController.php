@@ -22,6 +22,9 @@ class ProductoController extends Controller
     public function store(Request $request)
     {
         try {
+            if (!Schema::hasTable('prodcutos')) {
+                $this->createTable();
+            }
 
             $input = $request->all();
             $rules = [
@@ -39,6 +42,65 @@ class ProductoController extends Controller
         } catch (\Exception $e) {
             Log::info($e);
             return $this->sendError('UserController store', $e->getMessage(), $e->getCode());
+        }
+    }
+    public function update(Request $request, $id)
+    {
+        try {
+
+            $input = $request->all();
+            $rules = [
+                'nombre' => 'required',
+                'cantidad' => 'required',
+            ];
+
+            $validator = Validator::make($input, $rules);
+            if ($validator->fails()) return $this->sendError('Error de validacion', $validator->errors()->all(), 422);
+
+            $producto = Producto::where('id', $id)->first();
+            if (empty($producto)) throw new Exception('Producto no encontrado', 404);
+
+            $producto->fill($input);
+            $producto->save();
+            return $this->sendResponse($producto, 'Response');
+        } catch (\Exception $e) {
+            Log::info($e);
+            return $this->sendError('NegocioController update', $e->getMessage(), $e->getCode());
+        }
+    }
+    public function index()
+    {
+        try {
+            $productos = Producto::all();
+            return $this->sendResponse($productos, 'Response');
+        } catch (\Exception $e) {
+            Log::info($e);
+            return $this->sendError('ProductoController index', $e->getMessage(), $e->getCode());
+        }
+    }
+
+    public function show($id)
+    {
+        try {
+            $producto = Producto::where('id', $id)->first();
+            if (empty($producto)) throw new Exception('Prodcuto no encontrado', 404);
+
+            return $this->sendResponse($producto, 'Response');
+        } catch (\Exception $e) {
+            Log::info($e);
+            return $this->sendError('ProdcutoController show', $e->getMessage(), $e->getCode());
+        }
+    }
+
+    public function destroy($id)
+    {
+        try {
+            $producto = Producto::where('id', $id)->first();
+            $producto->delete();
+            return $this->sendResponse($producto, 'Response');
+        } catch (\Exception $e) {
+            Log::info($e);
+            return $this->sendError('ProductoController destroy', $e->getMessage(), $e->getCode());
         }
     }
 
