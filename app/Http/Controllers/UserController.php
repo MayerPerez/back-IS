@@ -99,7 +99,7 @@ class UserController extends Controller
             return $this->sendResponse($user, 'Response');
         } catch (\Exception $e) {
             Log::info($e);
-            return $this->sendError('UserController store', $e->getMessage(), $e->getCode());
+            return $this->sendError('UserController update', $e->getMessage(), $e->getCode());
         }
     }
 
