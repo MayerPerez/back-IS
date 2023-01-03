@@ -23,6 +23,10 @@ class NegocioController extends Controller
     {
         try {
 
+            if (!Schema::hasTable('negocios')) {
+                $this->createTable();
+            }
+
             $input = $request->all();
             $rules = [
                 'nombre' => 'required',
@@ -42,7 +46,72 @@ class NegocioController extends Controller
             return $this->sendResponse($negocio, 'Response');
         } catch (\Exception $e) {
             Log::info($e);
-            return $this->sendError('UserController store', $e->getMessage(), $e->getCode());
+            return $this->sendError('NegocioController store', $e->getMessage(), $e->getCode());
+        }
+    }
+
+    public function update(Request $request, $id)
+    {
+        try {
+
+            $input = $request->all();
+            $rules = [
+                'nombre' => 'required',
+                'correo' => 'required',
+                'password' => 'required',
+                'telefono' => 'required',
+                'direccion' => 'required',
+                'horario' => 'required',
+            ];
+
+            $validator = Validator::make($input, $rules);
+            if ($validator->fails()) return $this->sendError('Error de validacion', $validator->errors()->all(), 422);
+
+            $negocio = Negocio::where('id', $id)->first();
+            if (empty($negocio)) throw new Exception('Negocio no encontrado', 404);
+
+            $negocio->fill($input);
+            $negocio->save();
+            return $this->sendResponse($negocio, 'Response');
+        } catch (\Exception $e) {
+            Log::info($e);
+            return $this->sendError('NegocioController update', $e->getMessage(), $e->getCode());
+        }
+    }
+
+    public function index()
+    {
+        try {
+            $negocios = Negocio::all();
+            return $this->sendResponse($negocios, 'Response');
+        } catch (\Exception $e) {
+            Log::info($e);
+            return $this->sendError('NegocioController index', $e->getMessage(), $e->getCode());
+        }
+    }
+
+    public function show($id)
+    {
+        try {
+            $negocio = Negocio::where('id', $id)->first();
+            if (empty($negocio)) throw new Exception('Negocio no encontrado', 404);
+
+            return $this->sendResponse($negocio, 'Response');
+        } catch (\Exception $e) {
+            Log::info($e);
+            return $this->sendError('NegocioController show', $e->getMessage(), $e->getCode());
+        }
+    }
+
+    public function destroy($id)
+    {
+        try {
+            $negocio = Negocio::where('id', $id)->first();
+            $negocio->delete();
+            return $this->sendResponse($negocio, 'Response');
+        } catch (\Exception $e) {
+            Log::info($e);
+            return $this->sendError('NegocioController destroy', $e->getMessage(), $e->getCode());
         }
     }
 
@@ -60,7 +129,7 @@ class NegocioController extends Controller
             return $this->sendResponse($negocio, 'Response');
         } catch (\Exception $e) {
             Log::info($e);
-            return $this->sendError('UserController storeTest', $e->getMessage(), $e->getCode());
+            return $this->sendError('NegocioController storeTest', $e->getMessage(), $e->getCode());
         }
     }
 

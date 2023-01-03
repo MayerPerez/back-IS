@@ -30,6 +30,9 @@ Route::resource("/user", UserController::class)->only([
 ]);
 Route::post('/user/test/store', [UserController::class, 'storeTest']);
 
+Route::resource("/negocio", NegocioController::class)->only([
+    'store', 'update', 'show', 'destroy', 'index'
+]);
 Route::get('/negocio/test/store', [NegocioController::class, 'storeTest']);
 Route::get('/negocio/create/table', [NegocioController::class, 'createTable']);
 Route::get('/negocio/delete/table', [NegocioController::class, 'dropTable']);
