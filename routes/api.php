@@ -7,6 +7,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\NegocioController;
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\ProductoController;
+use App\Http\Controllers\LoginController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,6 +23,10 @@ use App\Http\Controllers\ProductoController;
 /*Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });*/
+//Login
+Route::post('/login/cliente', [LoginController::class, 'loginCliente']);
+Route::post('/login/negocio', [LoginController::class, 'loginNegocio']);
+
 //Rutas para el controlador de pruebas
 Route::post('/test/store', [TestController::class, 'store']);
 Route::get('/test/index', [TestController::class, 'index']);
