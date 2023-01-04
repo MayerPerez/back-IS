@@ -9,7 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Support\Facades\Hash;
 
-class Pedido extends Authenticatable
+class Publicacion extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
@@ -19,8 +19,13 @@ class Pedido extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'producto',
-        'cantidad'
+        'titulo',
+        'descripcion',
+        'promocion',
+        'descripcion',
+        'precio',
+        'descuento',
+        'disponibilidad'
     ];
 
    

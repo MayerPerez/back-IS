@@ -29,7 +29,7 @@ class ClienteController extends Controller
             $input = $request->all();
             $rules = [
                 'nombre' => 'required',
-                'correo' => 'required',
+                'correo' => 'required|unique:App\Models\Cliente,correo',
                 'password' => 'required',
                 'telefono' => 'required',
                 'direccion' => 'required',
@@ -41,7 +41,7 @@ class ClienteController extends Controller
             $cliente = new Cliente();
             $cliente->fill($input);
             $cliente->save();
-            return $this->sendResponse($cliente, 'Response');
+            return $this->sendResponse($cliente, 'Cliente creado correctamente');
         } catch (\Exception $e) {
             Log::info($e);
             return $this->sendError('ClienteController store', $e->getMessage(), $e->getCode());

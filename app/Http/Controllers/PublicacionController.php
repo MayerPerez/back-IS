@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Exception;
 use Throwable;
 use Validator;
-use App\Models\Pedido;
+use App\Models\Publicacion;
 use Illuminate\Http\Request;
 use App\Http\Traits\ResponseApi;
 use Illuminate\Support\Facades\Log;
@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 
 
-class PedidoController extends Controller
+class PublicacionController extends Controller
 {
     use ResponseApi;
 
@@ -22,7 +22,7 @@ class PedidoController extends Controller
     {
         try {
 
-            if (!Schema::hasTable('pedidos')) {
+            if (!Schema::hasTable('publicaciones')) {
                 $this->createTable();
             }
 
@@ -35,13 +35,13 @@ class PedidoController extends Controller
             $validator = Validator::make($input, $rules);
             if ($validator->fails()) return $this->sendError('Error de validacion', $validator->errors()->all(), 422);
 
-            $pedido = new Pedido();
-            $pedido->fill($input);
-            $pedido->save();
-            return $this->sendResponse($pedido, 'Response');
+            $publicacion = new Publicacion();
+            $publicacion->fill($input);
+            $publicacion->save();
+            return $this->sendResponse($publicacion, 'Response');
         } catch (\Exception $e) {
             Log::info($e);
-            return $this->sendError('PedidoController store', $e->getMessage(), $e->getCode());
+            return $this->sendError('PublicacionController store', $e->getMessage(), $e->getCode());
         }
     }
 
@@ -58,58 +58,58 @@ class PedidoController extends Controller
             $validator = Validator::make($input, $rules);
             if ($validator->fails()) return $this->sendError('Error de validacion', $validator->errors()->all(), 422);
 
-            $pedido = Pedido::where('id', $id)->first();
-            if (empty($pedido)) throw new Exception('Pedido no encontrado', 404);
+            $publicacion = Publicacion::where('id', $id)->first();
+            if (empty($publicacion)) throw new Exception('Publicacion no encontrado', 404);
 
-            $pedido->fill($input);
-            $pedido->save();
-            return $this->sendResponse($pedido, 'Response');
+            $publicacion->fill($input);
+            $publicacion->save();
+            return $this->sendResponse($publicacion, 'Response');
         } catch (\Exception $e) {
             Log::info($e);
-            return $this->sendError('PedidoController update', $e->getMessage(), $e->getCode());
+            return $this->sendError('PublicacionController update', $e->getMessage(), $e->getCode());
         }
     }
 
     public function index()
     {
         try {
-            $pedidos = Pedido::all();
-            return $this->sendResponse($pedidos, 'Response');
+            $publicaciones = Publicacion::all();
+            return $this->sendResponse($publicaciones, 'Response');
         } catch (\Exception $e) {
             Log::info($e);
-            return $this->sendError('PedidoController index', $e->getMessage(), $e->getCode());
+            return $this->sendError('PublicacionController index', $e->getMessage(), $e->getCode());
         }
     }
 
     public function show($id)
     {
         try {
-            $pedido = Pedido::where('id', $id)->first();
-            if (empty($pedido)) throw new Exception('Pedido no encontrado', 404);
+            $publicacion = Publicacion::where('id', $id)->first();
+            if (empty($publicacion)) throw new Exception('Publicacion no encontrado', 404);
 
-            return $this->sendResponse($pedido, 'Response');
+            return $this->sendResponse($publicacion, 'Response');
         } catch (\Exception $e) {
             Log::info($e);
-            return $this->sendError('PedidoController show', $e->getMessage(), $e->getCode());
+            return $this->sendError('PublicacionController show', $e->getMessage(), $e->getCode());
         }
     }
 
     public function destroy($id)
     {
         try {
-            $pedido = Pedido::where('id', $id)->first();
-            $pedido->delete();
-            return $this->sendResponse($pedido, 'Response');
+            $publicacion = Publicacion::where('id', $id)->first();
+            $publicacion->delete();
+            return $this->sendResponse($publicacion, 'Response');
         } catch (\Exception $e) {
             Log::info($e);
-            return $this->sendError('PedidoController destroy', $e->getMessage(), $e->getCode());
+            return $this->sendError('PublicacionController destroy', $e->getMessage(), $e->getCode());
         }
     }
 
     public function createTable()
     {
         try {
-            Schema::create('pedidos', function (Blueprint $table) {
+            Schema::create('publicaciones', function (Blueprint $table) {
                 $table->id();
                 $table->foreignId('producto_id');
                 $table->foreignId('cliente_id');
@@ -120,7 +120,7 @@ class PedidoController extends Controller
             return $this->sendResponse(true, 'Tabla creada');
         } catch (\Exception $e) {
             Log::info($e);
-            return $this->sendError('PedidoController createTable', $e->getMessage(), $e->getCode());
+            return $this->sendError('PublicacionController createTable', $e->getMessage(), $e->getCode());
         }
     }
 
@@ -128,11 +128,11 @@ class PedidoController extends Controller
     {
         try {
             
-            Schema::dropIfExists('pedidos');
+            Schema::dropIfExists('publicaciones');
             return $this->sendResponse(true, 'Tabla eliminada');
         } catch (\Exception $e) {
             Log::info($e);
-            return $this->sendError('PedidoController dropTable', $e->getMessage(), $e->getCode());
+            return $this->sendError('PublicacionController dropTable', $e->getMessage(), $e->getCode());
         }
     }
 
