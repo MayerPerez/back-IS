@@ -8,7 +8,6 @@ use Validator;
 use App\Models\Cliente;
 use Illuminate\Http\Request;
 use App\Http\Traits\ResponseApi;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Schema;

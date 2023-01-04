@@ -8,6 +8,7 @@ use App\Http\Controllers\NegocioController;
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\PedidoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -56,5 +57,10 @@ Route::get('/producto/test/store', [ProductoController::class, 'storeTest']);
 Route::get('/producto/create/table', [ProductoController::class, 'createTable']);
 Route::get('/producto/delete/table', [ProductoController::class, 'dropTable']);
 Route::resource("/producto", ProductoController::class)->only([
+    'store', 'update', 'index', 'show', 'destroy'
+]);
+
+
+Route::resource("/pedido", PedidoController::class)->only([
     'store', 'update', 'index', 'show', 'destroy'
 ]);
