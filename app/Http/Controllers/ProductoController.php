@@ -19,6 +19,7 @@ class ProductoController extends Controller
 {
     use ResponseApi;
 
+    //Verifica si la tabla esta creada, en caso contrario la crea y hace un INSERT de un nuevo Producto
     public function store(Request $request)
     {
         try {
@@ -44,6 +45,8 @@ class ProductoController extends Controller
             return $this->sendError('UserController store', $e->getMessage(), $e->getCode());
         }
     }
+
+    //Hace un UPDATE a la Tabla usando como referencia el ID, Método POST
     public function update(Request $request, $id)
     {
         try {
@@ -68,6 +71,8 @@ class ProductoController extends Controller
             return $this->sendError('NegocioController update', $e->getMessage(), $e->getCode());
         }
     }
+
+    //Muestra todo el contenido de la tabla Producto, Método GET
     public function index()
     {
         try {
@@ -79,6 +84,7 @@ class ProductoController extends Controller
         }
     }
 
+    //Muestra una fila usando como referencia el ID, Método GET
     public function show($id)
     {
         try {
@@ -92,6 +98,7 @@ class ProductoController extends Controller
         }
     }
 
+    //Elimina una fila usando el ID de referencia, Método DELETE
     public function destroy($id)
     {
         try {
@@ -104,6 +111,7 @@ class ProductoController extends Controller
         }
     }
 
+    //test
     public function storeTest(Request $request)
     {
         try {
@@ -118,6 +126,7 @@ class ProductoController extends Controller
         }
     }
 
+    //Crea la tabla Publicaciones, Método GET
     public function createTable()
     {
         try {
@@ -134,6 +143,7 @@ class ProductoController extends Controller
         }
     }
 
+    //Elimina la tabla Publicaciones, Método GET
     public function dropTable()
     {
         try {

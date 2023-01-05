@@ -18,6 +18,7 @@ class PublicacionController extends Controller
 {
     use ResponseApi;
 
+    //Verifica si la tabla Publicaciones esta creada, si no la crea y Hace un INSERT a la tabla
     public function store(Request $request)
     {
         try {
@@ -45,6 +46,7 @@ class PublicacionController extends Controller
         }
     }
 
+    //Hace un UPDATE a la Tabla en la fila especificada en el ID, Método POST
     public function update(Request $request, $id)
     {
         try {
@@ -70,6 +72,7 @@ class PublicacionController extends Controller
         }
     }
 
+    //Muestra todo el contenido de la tabla Publicaciones, Método GET
     public function index()
     {
         try {
@@ -81,6 +84,7 @@ class PublicacionController extends Controller
         }
     }
 
+    //Muestra un usuario en especifico usando el ID, Método GET
     public function show($id)
     {
         try {
@@ -94,6 +98,7 @@ class PublicacionController extends Controller
         }
     }
 
+    //ELimina una fila en espeficico usanso el ID, Método DELETE
     public function destroy($id)
     {
         try {
@@ -106,6 +111,7 @@ class PublicacionController extends Controller
         }
     }
 
+    //Crea la tabla publicacion, Método GET
     public function createTable()
     {
         try {
@@ -124,10 +130,11 @@ class PublicacionController extends Controller
         }
     }
 
+    //Elimina la tabla Publicacion, Método GET
     public function dropTable()
     {
         try {
-            
+
             Schema::dropIfExists('publicaciones');
             return $this->sendResponse(true, 'Tabla eliminada');
         } catch (\Exception $e) {
@@ -135,5 +142,4 @@ class PublicacionController extends Controller
             return $this->sendError('PublicacionController dropTable', $e->getMessage(), $e->getCode());
         }
     }
-
 }

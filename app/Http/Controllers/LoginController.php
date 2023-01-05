@@ -18,7 +18,7 @@ use App\Http\Controllers\Controller;
 class LoginController extends Controller
 {
     use ResponseApi;
-
+    //Funcion para el inicio de sesion del cliente Método POST
     public function loginCliente(Request $request)
     {
         try {
@@ -49,7 +49,7 @@ class LoginController extends Controller
             return $this->sendError('LoginController loginCliente', $e->getMessage(), $e->getCode());
         }
     }
-
+    //Fucnion para el inicio de Sesion del Negocio Métod POST
     public function loginNegocio(Request $request)
     {
         try {

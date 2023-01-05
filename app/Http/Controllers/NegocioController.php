@@ -19,6 +19,7 @@ class NegocioController extends Controller
 {
     use ResponseApi;
 
+    //Funcion que ve si existe la tabla de Negocio, sino la crea, en caso de que si crea hace un insert a la tabla de Negocios Método POST
     public function store(Request $request)
     {
         try {
@@ -50,6 +51,7 @@ class NegocioController extends Controller
         }
     }
 
+    //Funcion que hace un update Método POST PUT
     public function update(Request $request, $id)
     {
         try {
@@ -79,6 +81,7 @@ class NegocioController extends Controller
         }
     }
 
+    //Funcion que retorna todos los elementos de la tabla negocios Método GET
     public function index()
     {
         try {
@@ -90,6 +93,7 @@ class NegocioController extends Controller
         }
     }
 
+    //Funcion que retorna muestra un elemento en específico usando su ID Método GET
     public function show($id)
     {
         try {
@@ -103,6 +107,7 @@ class NegocioController extends Controller
         }
     }
 
+    //Funcion que borra un elemento en especifico usando su ID, Método DELETE
     public function destroy($id)
     {
         try {
@@ -115,6 +120,7 @@ class NegocioController extends Controller
         }
     }
 
+    //Funcion de prueba para crear un usaurio en la base de datos de forma manual
     public function storeTest(Request $request)
     {
         try {
@@ -133,6 +139,7 @@ class NegocioController extends Controller
         }
     }
 
+    //Funcion que crea la tabla de negocios, Método GET
     public function createTable()
     {
         try {
@@ -153,10 +160,11 @@ class NegocioController extends Controller
         }
     }
 
+    //Funcion que elimina la tabla de negocios, Método GET
     public function dropTable()
     {
         try {
-            
+
             Schema::dropIfExists('negocios');
             return $this->sendResponse(true, 'Tabla eliminada');
         } catch (\Exception $e) {
@@ -164,5 +172,4 @@ class NegocioController extends Controller
             return $this->sendError('NegocioController dropTable', $e->getMessage(), $e->getCode());
         }
     }
-
 }

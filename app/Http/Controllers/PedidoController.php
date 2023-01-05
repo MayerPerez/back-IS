@@ -17,7 +17,7 @@ use Illuminate\Database\Schema\Blueprint;
 class PedidoController extends Controller
 {
     use ResponseApi;
-
+    //VErifica si esta creada una tabla, la crea en caso de que no y hace un insert de una fila nueva
     public function store(Request $request)
     {
         try {
@@ -45,6 +45,7 @@ class PedidoController extends Controller
         }
     }
 
+    //Funcion que hace un UPDATE a los datos de una fila en específico usando su ID, Método POST
     public function update(Request $request, $id)
     {
         try {
@@ -70,6 +71,7 @@ class PedidoController extends Controller
         }
     }
 
+    //Funcion que retorna todo el contenido de la tabla Pedidos, Método GET
     public function index()
     {
         try {
@@ -81,6 +83,7 @@ class PedidoController extends Controller
         }
     }
 
+    //Funcion que  muestra una fila en espeficico usando su ID Métdo GET
     public function show($id)
     {
         try {
@@ -94,6 +97,7 @@ class PedidoController extends Controller
         }
     }
 
+    //Funcion que elimina una fila en especifico usando su ID, Método DELETE
     public function destroy($id)
     {
         try {
@@ -106,6 +110,7 @@ class PedidoController extends Controller
         }
     }
 
+    //Funcion que crea la tabla de Pedidos, Método  GET
     public function createTable()
     {
         try {
@@ -124,10 +129,11 @@ class PedidoController extends Controller
         }
     }
 
+    //Funcion que elimina la tabla de pedidos, Método Get
     public function dropTable()
     {
         try {
-            
+
             Schema::dropIfExists('pedidos');
             return $this->sendResponse(true, 'Tabla eliminada');
         } catch (\Exception $e) {
@@ -135,5 +141,4 @@ class PedidoController extends Controller
             return $this->sendError('PedidoController dropTable', $e->getMessage(), $e->getCode());
         }
     }
-
 }
