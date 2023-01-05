@@ -37,7 +37,13 @@ class LoginController extends Controller
 
             if (!Hash::check($input['password'], $cliente->password))  throw new Exception('Contraseña incorrecta', 404);
 
-            return $this->sendResponse($cliente, 'Response');
+            $token = $negocio->createToken('Token IS', [])->plainTextToken;
+            $data = [
+                'access_token' => $token,
+                'token_type' => 'Bearer',
+            ];
+
+            return $this->sendResponse($data, 'Response');
         } catch (\Exception $e) {
             Log::info($e);
             return $this->sendError('LoginController storeTest', $e->getMessage(), $e->getCode());
@@ -62,7 +68,13 @@ class LoginController extends Controller
 
             if (!Hash::check($input['password'], $negocio->password))  throw new Exception('Contraseña incorrecta', 404);
 
-            return $this->sendResponse($negocio, 'Response');
+            $token = $negocio->createToken('Token IS', [])->plainTextToken;
+            $data = [
+                'access_token' => $token,
+                'token_type' => 'Bearer',
+            ];
+
+            return $this->sendResponse($data, 'Response');
         } catch (\Exception $e) {
             Log::info($e);
             return $this->sendError('LoginController storeTest', $e->getMessage(), $e->getCode());
@@ -87,7 +99,7 @@ class LoginController extends Controller
             
             if(!Hash::check($input['password'], $negocio->password))  throw new Exception('Credenciales incorrectas', 404);
             
-            $token = $negocio->createToken('Token IS', [])->accessToken;
+            $token = $negocio->createToken('Token IS', [])->plainTextToken;
             $data = [
                 'access_token' => $token,
                 'token_type' => 'Bearer',
