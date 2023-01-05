@@ -41,7 +41,7 @@ class ClienteController extends Controller
             $cliente = new Cliente();
             $cliente->fill($input);
             $cliente->save();
-            return $this->sendResponse($cliente, 'Cliente creado correctamente');
+            return $this->sendResponse($cliente, 'Cuenta creada correctamente');
         } catch (\Exception $e) {
             Log::info($e);
             return $this->sendError('ClienteController store', $e->getMessage(), $e->getCode());
@@ -151,7 +151,7 @@ class ClienteController extends Controller
     public function dropTable()
     {
         try {
-            
+
             Schema::dropIfExists('clientes');
             return $this->sendResponse(true, 'Tabla eliminada');
         } catch (\Exception $e) {
@@ -159,5 +159,4 @@ class ClienteController extends Controller
             return $this->sendError('ClienteController dropTable', $e->getMessage(), $e->getCode());
         }
     }
-
 }

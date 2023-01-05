@@ -33,10 +33,10 @@ class LoginController extends Controller
 
             $cliente = Cliente::where('correo', $input['correo'])->first();
 
-            if (empty($cliente)) throw new Exception('Usario no encontrado', 404);
-            
-            if(!Hash::check($input['password'], $cliente->password))  throw new Exception('Credenciales incorrectas', 404);
-            
+            if (empty($cliente)) throw new Exception('Correo no encontrado', 404);
+
+            if (!Hash::check($input['password'], $cliente->password))  throw new Exception('Contraseña incorrecta', 404);
+
             return $this->sendResponse($cliente, 'Response');
         } catch (\Exception $e) {
             Log::info($e);
@@ -58,10 +58,10 @@ class LoginController extends Controller
 
             $negocio = Negocio::where('correo', $input['correo'])->first();
 
-            if (empty($negocio)) throw new Exception('Negocio no encontrado', 404);
-            
-            if(!Hash::check($input['password'], $negocio->password))  throw new Exception('Credenciales incorrectas', 404);
-            
+            if (empty($negocio)) throw new Exception('Correo no encontrado', 404);
+
+            if (!Hash::check($input['password'], $negocio->password))  throw new Exception('Contraseña incorrecta', 404);
+
             return $this->sendResponse($negocio, 'Response');
         } catch (\Exception $e) {
             Log::info($e);
