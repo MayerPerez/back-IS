@@ -18,7 +18,7 @@ use App\Http\Controllers\Controller;
 class LoginController extends Controller
 {
     use ResponseApi;
-
+    //Funcion para el inicio de sesion del cliente Método POST
     public function loginCliente(Request $request)
     {
         try {
@@ -43,7 +43,7 @@ class LoginController extends Controller
             return $this->sendError('LoginController storeTest', $e->getMessage(), $e->getCode());
         }
     }
-
+    //Fucnion para el inicio de Sesion del Negocio Métod POST
     public function loginNegocio(Request $request)
     {
         try {
@@ -84,9 +84,9 @@ class LoginController extends Controller
             $negocio = Negocio::where('correo', $input['correo'])->first();
 
             if (empty($negocio)) throw new Exception('Negocio no encontrado', 404);
-            
-            if(!Hash::check($input['password'], $negocio->password))  throw new Exception('Credenciales incorrectas', 404);
-            
+
+            if (!Hash::check($input['password'], $negocio->password))  throw new Exception('Credenciales incorrectas', 404);
+
             $token = $negocio->createToken('Token IS', [])->accessToken;
             $data = [
                 'access_token' => $token,

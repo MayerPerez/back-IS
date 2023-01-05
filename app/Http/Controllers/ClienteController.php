@@ -17,7 +17,7 @@ use Illuminate\Database\Schema\Blueprint;
 class ClienteController extends Controller
 {
     use ResponseApi;
-
+    //Crea la base de datos si no existe y si existe crea una fila mpetodo POST
     public function store(Request $request)
     {
         try {
@@ -48,6 +48,7 @@ class ClienteController extends Controller
         }
     }
 
+    //Funcion para actualizar los datos de la base de datos Método POST PUT
     public function update(Request $request, $id)
     {
         try {
@@ -76,6 +77,7 @@ class ClienteController extends Controller
         }
     }
 
+    //Funcion que retorna todos los elementos de la tabla clientes Método GET
     public function index()
     {
         try {
@@ -87,6 +89,7 @@ class ClienteController extends Controller
         }
     }
 
+    //Funcion que muestra un cliente en específico usando su ID Método GET
     public function show($id)
     {
         try {
@@ -100,6 +103,7 @@ class ClienteController extends Controller
         }
     }
 
+    //Fncion que elimina un cliente en especifico Método DELETE
     public function destroy($id)
     {
         try {
@@ -111,7 +115,7 @@ class ClienteController extends Controller
             return $this->sendError('ClienteController destroy', $e->getMessage(), $e->getCode());
         }
     }
-
+    //Funcion que crea un usuario de prueba, se uso para la conexion de la base de datos
     public function storeTest(Request $request)
     {
         try {
@@ -128,7 +132,7 @@ class ClienteController extends Controller
             return $this->sendError('ClienteController storeTest', $e->getMessage(), $e->getCode());
         }
     }
-
+    //Funcion que crea la base de datos de los clientes
     public function createTable()
     {
         try {
@@ -147,7 +151,7 @@ class ClienteController extends Controller
             return $this->sendError('ClienteController createTable', $e->getMessage(), $e->getCode());
         }
     }
-
+    //Funcion que elimina la base de datos de clientes
     public function dropTable()
     {
         try {
