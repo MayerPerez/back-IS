@@ -27,6 +27,7 @@ use App\Http\Controllers\PedidoController;
 //Login
 Route::post('/login/cliente', [LoginController::class, 'loginCliente']);
 Route::post('/login/negocio', [LoginController::class, 'loginNegocio']);
+Route::post('/login/test', [LoginController::class, 'loginTest']);
 
 //Rutas para el controlador de pruebas
 Route::post('/test/store', [TestController::class, 'store']);
