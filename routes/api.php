@@ -33,6 +33,9 @@ Route::post('/test/store', [TestController::class, 'store']);
 Route::get('/test/index', [TestController::class, 'index']);
 Route::get('/test/count', [TestController::class, 'countTables']);
 
+Route::post('/cliente', [ClienteController::class, 'store']);
+Route::post('/negocio', [NegocioController::class, 'store']);
+
 Route::middleware('auth:sanctum')->group(function () {
     //Rutas para el controlador de negocios
     Route::resource("/negocio", NegocioController::class)->only([
@@ -43,7 +46,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/negocio/delete/table', [NegocioController::class, 'dropTable']);
 
     Route::resource("/cliente", ClienteController::class)->only([
-        'store', 'update', 'show', 'destroy', 'index'
+        'update', 'show', 'destroy', 'index'
     ]);
     Route::get('/cliente/delete/table', [ClienteController::class, 'dropTable']);
 

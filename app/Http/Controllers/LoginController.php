@@ -37,7 +37,7 @@ class LoginController extends Controller
 
             if (!Hash::check($input['password'], $cliente->password))  throw new Exception('Contraseña incorrecta', 404);
 
-            $token = $negocio->createToken('Token IS', [])->plainTextToken;
+            $token = $cliente->createToken('Token IS', [])->plainTextToken;
             $data = [
                 'access_token' => $token,
                 'token_type' => 'Bearer',
@@ -46,7 +46,7 @@ class LoginController extends Controller
             return $this->sendResponse($data, 'Response');
         } catch (\Exception $e) {
             Log::info($e);
-            return $this->sendError('LoginController storeTest', $e->getMessage(), $e->getCode());
+            return $this->sendError('LoginController loginCliente', $e->getMessage(), $e->getCode());
         }
     }
 
@@ -81,33 +81,4 @@ class LoginController extends Controller
         }
     }
 
-    public function loginTest(Request $request)
-    {
-        try {
-            $input = $request->all();
-            $rules = [
-                'correo' => 'required',
-                'password' => 'required',
-            ];
-
-            $validator = Validator::make($input, $rules);
-            if ($validator->fails()) return $this->sendError('Error de validacion', $validator->errors()->all(), 422);
-
-            $negocio = Negocio::where('correo', $input['correo'])->first();
-
-            if (empty($negocio)) throw new Exception('Negocio no encontrado', 404);
-            
-            if(!Hash::check($input['password'], $negocio->password))  throw new Exception('Credenciales incorrectas', 404);
-            
-            $token = $negocio->createToken('Token IS', [])->plainTextToken;
-            $data = [
-                'access_token' => $token,
-                'token_type' => 'Bearer',
-            ];
-            return $this->sendResponse($data, 'Response');
-        } catch (\Exception $e) {
-            Log::info($e);
-            return $this->sendError('LoginController storeTest', $e->getMessage(), $e->getCode());
-        }
-    }
 }
