@@ -81,6 +81,37 @@ class NegocioController extends Controller
         }
     }
 
+    public function updateAuth(Request $request)
+    {
+        try {
+
+            $negocio = $request->user();
+
+            $input = $request->all();
+            $rules = [
+                'nombre' => 'required',
+                'correo' => 'required',
+                'password' => 'required',
+                'telefono' => 'required',
+                'direccion' => 'required',
+                'horario' => 'required',
+            ];
+
+            $validator = Validator::make($input, $rules);
+            if ($validator->fails()) return $this->sendError('Error de validacion', $validator->errors()->all(), 422);
+
+            /*$negocio = Negocio::where('id', $id)->first();
+            if (empty($negocio)) throw new Exception('Negocio no encontrado', 404);*/
+
+            $negocio->fill($input);
+            $negocio->save();
+            return $this->sendResponse($negocio, 'Información actalizada');
+        } catch (\Exception $e) {
+            Log::info($e);
+            return $this->sendError('NegocioController update', $e->getMessage(), $e->getCode());
+        }
+    }
+
     //Funcion que retorna todos los elementos de la tabla negocios Método GET
     public function index()
     {
@@ -112,8 +143,6 @@ class NegocioController extends Controller
         try {
 
             $negocio = $request->user();
-            /*$negocio = Negocio::where('id', $id)->first();
-            if (empty($negocio)) throw new Exception('Negocio no encontrado', 404);*/
 
             return $this->sendResponse($negocio, 'Response');
         } catch (\Exception $e) {

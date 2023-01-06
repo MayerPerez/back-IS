@@ -39,6 +39,7 @@ Route::post('/negocio', [NegocioController::class, 'store']);
 Route::middleware('auth:sanctum')->group(function () {
     //Rutas para el controlador de negocios
     Route::get('/negocio/auth', [NegocioController::class, 'authNegocio']);
+    Route::put('/negocio', [NegocioController::class, 'updateAuth']);
     Route::resource("/negocio", NegocioController::class)->only([
         'store', 'update', 'show', 'destroy', 'index'
     ]);
