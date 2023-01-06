@@ -107,6 +107,21 @@ class NegocioController extends Controller
         }
     }
 
+    public function authNegocio(Request $request)
+    {
+        try {
+
+            $negocio = $request->user();
+            /*$negocio = Negocio::where('id', $id)->first();
+            if (empty($negocio)) throw new Exception('Negocio no encontrado', 404);*/
+
+            return $this->sendResponse($negocio, 'Response');
+        } catch (\Exception $e) {
+            Log::info($e);
+            return $this->sendError('NegocioController show', $e->getMessage(), $e->getCode());
+        }
+    }
+
     //Funcion que borra un elemento en especifico usando su ID, Método DELETE
     public function destroy($id)
     {
