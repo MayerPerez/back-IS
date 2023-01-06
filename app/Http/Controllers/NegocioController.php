@@ -44,7 +44,7 @@ class NegocioController extends Controller
             $negocio = new Negocio();
             $negocio->fill($input);
             $negocio->save();
-            return $this->sendResponse($negocio, 'Response');
+            return $this->sendResponse($negocio, 'Negocio Creado');
         } catch (\Exception $e) {
             Log::info($e);
             return $this->sendError('NegocioController store', $e->getMessage(), $e->getCode());
