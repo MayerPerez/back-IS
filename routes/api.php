@@ -47,6 +47,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/negocio/create/table', [NegocioController::class, 'createTable']);
     Route::get('/negocio/delete/table', [NegocioController::class, 'dropTable']);
 
+    Route::get('/cliente/auth', [ClienteController::class, 'authCliente']);
+    Route::put('/cliente', [ClienteController::class, 'updateAuth']);
     Route::resource("/cliente", ClienteController::class)->only([
         'update', 'show', 'destroy', 'index'
     ]);

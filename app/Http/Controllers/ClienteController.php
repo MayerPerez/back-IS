@@ -77,6 +77,33 @@ class ClienteController extends Controller
         }
     }
 
+    public function updateAuth(Request $request)
+    {
+        try {
+
+            $cliente = $request->user();
+
+            $input = $request->all();
+            $rules = [
+                'nombre' => 'required',
+                'correo' => 'required',
+                'password' => 'required',
+                'telefono' => 'required',
+                'direccion' => 'required',
+            ];
+
+            $validator = Validator::make($input, $rules);
+            if ($validator->fails()) return $this->sendError('Error de validacion', $validator->errors()->all(), 422);
+
+            $cliente->fill($input);
+            $cliente->save();
+            return $this->sendResponse($cliente, 'Información actalizada');
+        } catch (\Exception $e) {
+            Log::info($e);
+            return $this->sendError('NegocioController update', $e->getMessage(), $e->getCode());
+        }
+    }
+
     //Funcion que retorna todos los elementos de la tabla clientes Método GET
     public function index()
     {
@@ -100,6 +127,19 @@ class ClienteController extends Controller
         } catch (\Exception $e) {
             Log::info($e);
             return $this->sendError('ClienteController show', $e->getMessage(), $e->getCode());
+        }
+    }
+
+    public function authCliente(Request $request)
+    {
+        try {
+
+            $cliente = $request->user();
+
+            return $this->sendResponse($cliente, 'Response');
+        } catch (\Exception $e) {
+            Log::info($e);
+            return $this->sendError('NegocioController show', $e->getMessage(), $e->getCode());
         }
     }
 
