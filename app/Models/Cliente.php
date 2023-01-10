@@ -13,6 +13,8 @@ class Cliente extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
+    protected $table = 'clientes';
+
     /**
      * The attributes that are mass assignable.
      *

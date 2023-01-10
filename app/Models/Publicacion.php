@@ -13,6 +13,8 @@ class Publicacion extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
+    protected $table = 'publicaciones';
+
     /**
      * The attributes that are mass assignable.
      *
@@ -22,7 +24,6 @@ class Publicacion extends Authenticatable
         'titulo',
         'descripcion',
         'promocion',
-        'descripcion',
         'precio',
         'descuento',
         'disponibilidad'

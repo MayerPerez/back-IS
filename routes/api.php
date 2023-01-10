@@ -7,6 +7,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\NegocioController;
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\ProductoController;
+use App\Http\Controllers\PublicacionController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PedidoController;
 
@@ -61,6 +62,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::resource("/producto", ProductoController::class)->only([
         'store', 'update', 'index', 'show', 'destroy'
     ]);
+
+    Route::post('/publicacion', [PublicacionController::class, 'store']);
 
     //Rutas para el controlador de pedidos
     Route::resource("/pedido", PedidoController::class)->only([

@@ -13,6 +13,8 @@ class Negocio extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
+    protected $table = 'negocios';
+
     /**
      * The attributes that are mass assignable.
      *

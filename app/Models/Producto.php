@@ -13,6 +13,7 @@ class Producto extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
+    protected $table = 'productos';
     /**
      * The attributes that are mass assignable.
      *

@@ -13,6 +13,8 @@ class Pedido extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
+    protected $table = 'pedidos';
+
     /**
      * The attributes that are mass assignable.
      *

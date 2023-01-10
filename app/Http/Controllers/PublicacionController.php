@@ -6,11 +6,13 @@ use Exception;
 use Throwable;
 use Validator;
 use App\Models\Publicacion;
+use App\Models\Producto;
 use Illuminate\Http\Request;
 use App\Http\Traits\ResponseApi;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Schema\Blueprint;
 
 
@@ -23,23 +25,48 @@ class PublicacionController extends Controller
     {
         try {
 
+            $negocio = $request->user();
+
             if (!Schema::hasTable('publicaciones')) {
-                $this->createTable();
+                $this->createTablePub();
+            }
+
+            if (!Schema::hasTable('productos')) {
+                $this->createTableProd();
             }
 
             $input = $request->all();
             $rules = [
-                'producto' => 'required',
-                'cantidad' => 'required'
+                'titulo' => 'required',
+                'nombre' => 'required',
+                'promocion' => 'required',
+                'precio' => 'required',
+                'cantidad' => 'required',
+                'descripcion' => 'required'
             ];
 
+            $file = $request->file('image');
+            $name = $file->getClientOriginalName();
+            
+            $path = $request->file('image')->storeAs('public/images', $name);
+            
+            $url = Storage::url($path);
+            
             $validator = Validator::make($input, $rules);
             if ($validator->fails()) return $this->sendError('Error de validacion', $validator->errors()->all(), 422);
 
             $publicacion = new Publicacion();
             $publicacion->fill($input);
+            $publicacion->negocio_id = $negocio->id;
+            $publicacion->pathImage = $url;
+
+            $producto = new Producto();
+            $producto->fill($input);
+            $producto->save();
+
+            $publicacion->producto_id = $producto->id;
             $publicacion->save();
-            return $this->sendResponse($publicacion, 'Response');
+            return $this->sendResponse($publicacion, 'Producto agregado correctamente');
         } catch (\Exception $e) {
             Log::info($e);
             return $this->sendError('PublicacionController store', $e->getMessage(), $e->getCode());
@@ -112,21 +139,41 @@ class PublicacionController extends Controller
     }
 
     //Crea la tabla publicacion, Método GET
-    public function createTable()
+    public function createTablePub()
     {
         try {
             Schema::create('publicaciones', function (Blueprint $table) {
                 $table->id();
                 $table->foreignId('producto_id');
-                $table->foreignId('cliente_id');
-                $table->string('producto');
-                $table->string('cantidad');
+                $table->foreignId('negocio_id');
+                $table->string('titulo');
+                $table->string('descripcion');
+                $table->string('promocion');
+                $table->string('precio');
+                $table->string('pathImage');
                 $table->timestamps();
             });
             return $this->sendResponse(true, 'Tabla creada');
         } catch (\Exception $e) {
             Log::info($e);
             return $this->sendError('PublicacionController createTable', $e->getMessage(), $e->getCode());
+        }
+    }
+
+    //Crea la tabla Publicaciones, Método GET
+    public function createTableProd()
+    {
+        try {
+            Schema::create('productos', function (Blueprint $table) {
+                $table->id();
+                $table->string('nombre');
+                $table->string('cantidad');
+                $table->timestamps();
+            });
+            return $this->sendResponse(true, 'Tabla creada');
+        } catch (\Exception $e) {
+            Log::info($e);
+            return $this->sendError('UserController storeTest', $e->getMessage(), $e->getCode());
         }
     }
 
