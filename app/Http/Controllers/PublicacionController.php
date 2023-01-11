@@ -148,7 +148,7 @@ class PublicacionController extends Controller
         try {
             $publicacion = Publicacion::where('id', $id)->first();
             $publicacion->delete();
-            return $this->sendResponse($publicacion, 'Response');
+            return $this->sendResponse($publicacion, 'Publicacion eliminada');
         } catch (\Exception $e) {
             Log::info($e);
             return $this->sendError('PublicacionController destroy', $e->getMessage(), $e->getCode());
