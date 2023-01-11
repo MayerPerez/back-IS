@@ -45,6 +45,9 @@ class PublicacionController extends Controller
                 'descripcion' => 'required'
             ];
 
+            $validator = Validator::make($input, $rules);
+            if ($validator->fails()) return $this->sendError('Error de validacion', $validator->errors()->all(), 422);
+
             $file = $request->file('image');
             $name = $file->getClientOriginalName();
             
@@ -52,9 +55,6 @@ class PublicacionController extends Controller
             
             $url = Storage::url($path);
             
-            $validator = Validator::make($input, $rules);
-            if ($validator->fails()) return $this->sendError('Error de validacion', $validator->errors()->all(), 422);
-
             $publicacion = new Publicacion();
             $publicacion->fill($input);
             $publicacion->negocio_id = $negocio->id;
@@ -94,22 +94,37 @@ class PublicacionController extends Controller
     public function update(Request $request, $id)
     {
         try {
+            $negocio = $request->user();
 
             $input = $request->all();
             $rules = [
-                'producto' => 'required',
-                'cantidad' => 'required'
+                'titulo' => 'required',
+                'nombre' => 'required',
+                'promocion' => 'required',
+                'precio' => 'required',
+                'cantidad' => 'required',
+                'descripcion' => 'required'
             ];
 
             $validator = Validator::make($input, $rules);
             if ($validator->fails()) return $this->sendError('Error de validacion', $validator->errors()->all(), 422);
 
-            $publicacion = Publicacion::where('id', $id)->first();
+            $file = $request->file('image');
+            $name = $file->getClientOriginalName();
+            
+            $path = $request->file('image')->storeAs('public/images', $name);
+            
+            $url = Storage::url($path);
+
+            $publicacion = Publicacion::where('negocio_id', $negocio->id)->where('id', $id)->first();
             if (empty($publicacion)) throw new Exception('Publicacion no encontrado', 404);
 
             $publicacion->fill($input);
+            $publicacion->disponibilidad = $input['cantidad'];
+            $publicacion->pathImage = $url;
             $publicacion->save();
-            return $this->sendResponse($publicacion, 'Response');
+
+            return $this->sendResponse($publicacion, 'Publicacion editada correctamente');
         } catch (\Exception $e) {
             Log::info($e);
             return $this->sendError('PublicacionController update', $e->getMessage(), $e->getCode());
@@ -129,10 +144,11 @@ class PublicacionController extends Controller
     }
 
     //Muestra un usuario en especifico usando el ID, Método GET
-    public function show($id)
+    public function show(Request $request, $id)
     {
         try {
-            $publicacion = Publicacion::where('id', $id)->first();
+            $negocio = $request->user();
+            $publicacion = Publicacion::where('negocio_id', $negocio->id)->where('id', $id)->first();
             if (empty($publicacion)) throw new Exception('Publicacion no encontrado', 404);
 
             return $this->sendResponse($publicacion, 'Response');
@@ -143,10 +159,11 @@ class PublicacionController extends Controller
     }
 
     //ELimina una fila en espeficico usanso el ID, Método DELETE
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
         try {
-            $publicacion = Publicacion::where('id', $id)->first();
+            $negocio = $request->user();
+            $publicacion = Publicacion::where('negocio_id', $negocio->id)->where('id', $id)->first();
             $publicacion->delete();
             return $this->sendResponse($publicacion, 'Publicacion eliminada');
         } catch (\Exception $e) {
