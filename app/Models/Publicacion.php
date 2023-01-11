@@ -22,6 +22,7 @@ class Publicacion extends Authenticatable
      */
     protected $fillable = [
         'titulo',
+        'nombre',
         'descripcion',
         'promocion',
         'precio',

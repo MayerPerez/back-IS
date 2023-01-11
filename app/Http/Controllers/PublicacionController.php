@@ -58,6 +58,7 @@ class PublicacionController extends Controller
             $publicacion = new Publicacion();
             $publicacion->fill($input);
             $publicacion->negocio_id = $negocio->id;
+            $publicacion->disponibilidad = $input['cantidad'];
             $publicacion->pathImage = $url;
 
             $producto = new Producto();
@@ -72,6 +73,22 @@ class PublicacionController extends Controller
             return $this->sendError('PublicacionController store', $e->getMessage(), $e->getCode());
         }
     }
+
+
+    public function getPublicaciones(Request $request)
+    {
+        try {
+            $negocio = $request->user();
+
+            $publicaciones = Publicacion::where('negocio_id', $negocio->id)->get();
+
+            return $this->sendResponse($publicaciones, 'Response');
+        } catch (\Exception $e) {
+            Log::info($e);
+            return $this->sendError('PublicacionController index', $e->getMessage(), $e->getCode());
+        }
+    }
+
 
     //Hace un UPDATE a la Tabla en la fila especificada en el ID, Método POST
     public function update(Request $request, $id)
@@ -147,9 +164,11 @@ class PublicacionController extends Controller
                 $table->foreignId('producto_id');
                 $table->foreignId('negocio_id');
                 $table->string('titulo');
+                $table->string('nombre');
                 $table->string('descripcion');
                 $table->string('promocion');
                 $table->string('precio');
+                $table->string('disponibilidad');
                 $table->string('pathImage');
                 $table->timestamps();
             });
