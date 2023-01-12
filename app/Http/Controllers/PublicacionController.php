@@ -138,10 +138,9 @@ class PublicacionController extends Controller
         try {
             $publicaciones = Publicacion::all();
             foreach ($publicaciones as $publicacion) {
-                //Log::info($publicacion);
                 $negocio = Negocio::where('id',$publicacion->negocio_id)->first();
-                //Log::info($negocio);
                 $publicacion->negocio = $negocio->nombre;
+                $publicacion->direccion = $negocio->direccion;
             }
 
             return $this->sendResponse($publicaciones, 'Response');

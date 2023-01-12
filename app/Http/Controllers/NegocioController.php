@@ -105,7 +105,7 @@ class NegocioController extends Controller
 
             $negocio->fill($input);
             $negocio->save();
-            return $this->sendResponse($negocio, 'Información actalizada');
+            return $this->sendResponse($negocio, 'Información actualizada');
         } catch (\Exception $e) {
             Log::info($e);
             return $this->sendError('NegocioController update', $e->getMessage(), $e->getCode());
