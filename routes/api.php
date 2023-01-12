@@ -67,7 +67,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/publicaciones', [PublicacionController::class, 'getPublicaciones']);
     Route::post('/publicacion/{id}', [PublicacionController::class, 'update']);
     Route::resource("/publicacion", PublicacionController::class)->only([
-        'show', 'destroy'
+        'show', 'destroy', 'index'
     ]);
 
     //Rutas para el controlador de pedidos

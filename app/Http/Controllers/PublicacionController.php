@@ -7,6 +7,7 @@ use Throwable;
 use Validator;
 use App\Models\Publicacion;
 use App\Models\Producto;
+use App\Models\Negocio;
 use Illuminate\Http\Request;
 use App\Http\Traits\ResponseApi;
 use Illuminate\Support\Facades\Log;
@@ -136,6 +137,13 @@ class PublicacionController extends Controller
     {
         try {
             $publicaciones = Publicacion::all();
+            foreach ($publicaciones as $publicacion) {
+                //Log::info($publicacion);
+                $negocio = Negocio::where('id',$publicacion->negocio_id)->first();
+                //Log::info($negocio);
+                $publicacion->negocio = $negocio->nombre;
+            }
+
             return $this->sendResponse($publicaciones, 'Response');
         } catch (\Exception $e) {
             Log::info($e);
