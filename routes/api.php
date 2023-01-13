@@ -72,6 +72,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     //Rutas para el controlador de pedidos
     Route::get('/pedido/cliente', [PedidoController::class, 'indexCliente']);
+    Route::get('/pedido/negocio', [PedidoController::class, 'indexNegocio']);
     Route::resource("/pedido", PedidoController::class)->only([
         'store', 'update', 'show', 'destroy'
     ]);

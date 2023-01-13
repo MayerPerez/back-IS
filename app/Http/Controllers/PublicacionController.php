@@ -24,7 +24,11 @@ class PublicacionController extends Controller
     public function __construct()
     {
         if (!Schema::hasTable('publicaciones')) {
-            $this->createTable();
+            $this->createTablePub();
+        }
+
+        if (!Schema::hasTable('productos')) {
+            $this->createTableProd();
         }
     }
 
@@ -34,10 +38,6 @@ class PublicacionController extends Controller
         try {
 
             $negocio = $request->user();
-
-            if (!Schema::hasTable('productos')) {
-                $this->createTableProd();
-            }
 
             $input = $request->all();
             $rules = [
@@ -150,7 +150,7 @@ class PublicacionController extends Controller
                 $negocio = Negocio::where('id',$publicacion->negocio_id)->first();
                 $publicacion->negocio = $negocio->nombre;
                 $publicacion->direccion = $negocio->direccion;
-                $publicacion->horario = $negocio->horario;
+                $publicacion->horario_c = $negocio->horario_c;
                 
                 array_push($filtradas, $publicacion );
             }

@@ -7,6 +7,7 @@ use Throwable;
 use Validator;
 use Carbon\Carbon;
 use App\Models\Pedido;
+use App\Models\Cliente;
 use App\Models\Negocio;
 use App\Models\Publicacion;
 use Illuminate\Http\Request;
@@ -114,6 +115,33 @@ class PedidoController extends Controller
                 $pedido->precio = $publicacion->precio;
                 $pedido->negocio = $negocio->nombre;
                 $pedido->direccion = $negocio->direccion;
+                $tiempo = new Carbon($pedido->created_at);
+                $tiempo->setTimezone('America/Mexico_City');
+                $pedido->hora = $tiempo->toTimeString();
+                $pedido->fecha = $tiempo->toDateString();
+                $pedido->total = strval(intval($pedido->cantidad)* intval($publicacion->precio));
+            }
+
+            return $this->sendResponse($pedidos, 'Response');
+        } catch (\Exception $e) {
+            Log::info($e);
+            return $this->sendError('PedidoController index', $e->getMessage(), $e->getCode());
+        }
+    }
+
+    public function indexNegocio(Request $request)
+    {
+        try {
+            $negocio = $request->user();
+            $pedidos = Pedido::where('negocio_id', $negocio->id)->where('status', 'Reservado')->get();
+            foreach ($pedidos as $pedido) {
+                $cliente = Cliente::where('id',$pedido->cliente_id)->first();
+                $publicacion = Publicacion::where('id', $pedido->publicacion_id)->first();
+
+                $pedido->cliente = $cliente->nombre;
+                $pedido->telefono = $cliente->telefono;
+                $pedido->producto = $publicacion->nombre;
+                $pedido->precio = $publicacion->precio;
                 $tiempo = new Carbon($pedido->created_at);
                 $tiempo->setTimezone('America/Mexico_City');
                 $pedido->hora = $tiempo->toTimeString();
