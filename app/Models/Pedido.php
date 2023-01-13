@@ -21,7 +21,9 @@ class Pedido extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'producto',
+        'cliente_id',
+        'publicacion_id',
+        'negocio_id',
         'cantidad'
     ];
 

@@ -137,13 +137,22 @@ class PublicacionController extends Controller
     {
         try {
             $publicaciones = Publicacion::all();
+
+            //validar horario de negocio
+
+            $filtradas = [];
             foreach ($publicaciones as $publicacion) {
+                if(intval($publicacion->disponibilidad) == 0) continue;
+                
                 $negocio = Negocio::where('id',$publicacion->negocio_id)->first();
                 $publicacion->negocio = $negocio->nombre;
                 $publicacion->direccion = $negocio->direccion;
+                $publicacion->horario = $negocio->horario;
+                
+                array_push($filtradas, $publicacion );
             }
 
-            return $this->sendResponse($publicaciones, 'Response');
+            return $this->sendResponse($filtradas, 'Response');
         } catch (\Exception $e) {
             Log::info($e);
             return $this->sendError('PublicacionController index', $e->getMessage(), $e->getCode());

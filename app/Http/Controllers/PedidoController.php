@@ -6,6 +6,8 @@ use Exception;
 use Throwable;
 use Validator;
 use App\Models\Pedido;
+use App\Models\Negocio;
+use App\Models\Publicacion;
 use Illuminate\Http\Request;
 use App\Http\Traits\ResponseApi;
 use Illuminate\Support\Facades\Log;
@@ -26,19 +28,39 @@ class PedidoController extends Controller
                 $this->createTable();
             }
 
+            $cliente = $request->user();
+
             $input = $request->all();
             $rules = [
-                'producto' => 'required',
+                'publicacion_id' => 'required',
+                'negocio_id' => 'required',
                 'cantidad' => 'required'
             ];
 
             $validator = Validator::make($input, $rules);
             if ($validator->fails()) return $this->sendError('Error de validacion', $validator->errors()->all(), 422);
 
+            //Validar horario
+
+            //Validar cantidad
+            $publicacion = Publicacion::where('id', $input['publicacion_id'])
+                    ->where('negocio_id', $input['negocio_id'])
+                    ->first();
+
+            if(empty($publicacion)) return $this->sendError('Not Found', ['Publicacion no encontrada'], 404);
+
+            $cantidad = intval($input['cantidad']);
+            if(intval($publicacion->disponibilidad) < $cantidad) return $this->sendError('Error', ['¡Cantidad excedente!. Refresca la pagina para ver la cantidad disponible actual'], 404);
+
             $pedido = new Pedido();
             $pedido->fill($input);
+            $pedido->cliente_id = $cliente->id;
             $pedido->save();
-            return $this->sendResponse($pedido, 'Response');
+
+            $publicacion->disponibilidad = strval(intval($publicacion->disponibilidad) - $cantidad);
+            $publicacion->save();
+
+            return $this->sendResponse($pedido, 'Producto reservado. ¡Tienes 30 minutos para ir a recogerlo! Si no llegas se cancelará tu reservación.');
         } catch (\Exception $e) {
             Log::info($e);
             return $this->sendError('PedidoController store', $e->getMessage(), $e->getCode());
@@ -116,9 +138,9 @@ class PedidoController extends Controller
         try {
             Schema::create('pedidos', function (Blueprint $table) {
                 $table->id();
-                $table->foreignId('producto_id');
+                $table->foreignId('publicacion_id');
                 $table->foreignId('cliente_id');
-                $table->string('producto');
+                $table->string('negocio_id');
                 $table->string('cantidad');
                 $table->timestamps();
             });
