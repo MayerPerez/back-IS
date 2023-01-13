@@ -24,7 +24,8 @@ class Pedido extends Authenticatable
         'cliente_id',
         'publicacion_id',
         'negocio_id',
-        'cantidad'
+        'cantidad',
+        'status'
     ];
 
    

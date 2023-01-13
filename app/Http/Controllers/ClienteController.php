@@ -17,14 +17,18 @@ use Illuminate\Database\Schema\Blueprint;
 class ClienteController extends Controller
 {
     use ResponseApi;
+
+    public function __construct()
+    {
+        if (!Schema::hasTable('clientes')) {
+            $this->createTable();
+        }
+    }
+
     //Crea la base de datos si no existe y si existe crea una fila mpetodo POST
     public function store(Request $request)
     {
         try {
-
-            if (!Schema::hasTable('clientes')) {
-                $this->createTable();
-            }
 
             $input = $request->all();
             $rules = [

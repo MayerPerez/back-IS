@@ -21,16 +21,19 @@ class PublicacionController extends Controller
 {
     use ResponseApi;
 
+    public function __construct()
+    {
+        if (!Schema::hasTable('publicaciones')) {
+            $this->createTable();
+        }
+    }
+
     //Verifica si la tabla Publicaciones esta creada, si no la crea y Hace un INSERT a la tabla
     public function store(Request $request)
     {
         try {
 
             $negocio = $request->user();
-
-            if (!Schema::hasTable('publicaciones')) {
-                $this->createTablePub();
-            }
 
             if (!Schema::hasTable('productos')) {
                 $this->createTableProd();

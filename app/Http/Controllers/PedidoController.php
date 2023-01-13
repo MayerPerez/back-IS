@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Exception;
 use Throwable;
 use Validator;
+use Carbon\Carbon;
 use App\Models\Pedido;
 use App\Models\Negocio;
 use App\Models\Publicacion;
@@ -19,14 +20,17 @@ use Illuminate\Database\Schema\Blueprint;
 class PedidoController extends Controller
 {
     use ResponseApi;
+
+    public function __construct()
+    {
+        if (!Schema::hasTable('pedidos')) {
+            $this->createTable();
+        }
+    }
     //VErifica si esta creada una tabla, la crea en caso de que no y hace un insert de una fila nueva
     public function store(Request $request)
     {
         try {
-
-            if (!Schema::hasTable('pedidos')) {
-                $this->createTable();
-            }
 
             $cliente = $request->user();
 
@@ -55,6 +59,7 @@ class PedidoController extends Controller
             $pedido = new Pedido();
             $pedido->fill($input);
             $pedido->cliente_id = $cliente->id;
+            $pedido->status = 'Reservado';
             $pedido->save();
 
             $publicacion->disponibilidad = strval(intval($publicacion->disponibilidad) - $cantidad);
@@ -94,10 +99,28 @@ class PedidoController extends Controller
     }
 
     //Funcion que retorna todo el contenido de la tabla Pedidos, Método GET
-    public function index()
+    public function indexCliente(Request $request)
     {
         try {
-            $pedidos = Pedido::all();
+            $cliente = $request->user();
+            $pedidos = Pedido::where('cliente_id', $cliente->id)->where('status', 'Reservado')->get();
+            foreach ($pedidos as $pedido) {
+                $negocio = Negocio::where('id',$pedido->negocio_id)->first();
+                $publicacion = Publicacion::where('id', $pedido->publicacion_id)
+                ->where('negocio_id', $pedido->negocio_id)
+                ->first();
+
+                $pedido->producto = $publicacion->nombre;
+                $pedido->precio = $publicacion->precio;
+                $pedido->negocio = $negocio->nombre;
+                $pedido->direccion = $negocio->direccion;
+                $tiempo = new Carbon($pedido->created_at);
+                $tiempo->setTimezone('America/Mexico_City');
+                $pedido->hora = $tiempo->toTimeString();
+                $pedido->fecha = $tiempo->toDateString();
+                $pedido->total = strval(intval($pedido->cantidad)* intval($publicacion->precio));
+            }
+
             return $this->sendResponse($pedidos, 'Response');
         } catch (\Exception $e) {
             Log::info($e);
@@ -142,6 +165,7 @@ class PedidoController extends Controller
                 $table->foreignId('cliente_id');
                 $table->string('negocio_id');
                 $table->string('cantidad');
+                $table->string('status');
                 $table->timestamps();
             });
             return $this->sendResponse(true, 'Tabla creada');

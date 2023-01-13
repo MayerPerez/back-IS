@@ -19,14 +19,17 @@ class NegocioController extends Controller
 {
     use ResponseApi;
 
+    public function __construct()
+    {
+        if (!Schema::hasTable('negocios')) {
+            $this->createTable();
+        }
+    }
+
     //Funcion que ve si existe la tabla de Negocio, sino la crea, en caso de que si crea hace un insert a la tabla de Negocios Método POST
     public function store(Request $request)
     {
         try {
-
-            if (!Schema::hasTable('negocios')) {
-                $this->createTable();
-            }
 
             $input = $request->all();
             $rules = [
