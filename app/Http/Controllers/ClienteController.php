@@ -6,6 +6,7 @@ use Exception;
 use Throwable;
 use Validator;
 use App\Models\Cliente;
+use App\Models\Pedido;
 use Illuminate\Http\Request;
 use App\Http\Traits\ResponseApi;
 use Illuminate\Support\Facades\Log;
@@ -147,12 +148,19 @@ class ClienteController extends Controller
     }
 
     //Fncion que elimina un cliente en especifico Método DELETE
-    public function destroy($id)
+    public function destroy(Request $request)
     {
         try {
-            $cliente = Cliente::where('id', $id)->first();
+            $cliente = $request->user();
+
+            $pedidos = Pedido::where('cliente_id', $cliente->id)->get();
+
+            foreach ($pedidos as $pedido) {
+                $pedido->delete();
+            }
+            
             $cliente->delete();
-            return $this->sendResponse($cliente, 'Response');
+            return $this->sendResponse($cliente, 'Cuenta eliminada');
         } catch (\Exception $e) {
             Log::info($e);
             return $this->sendError('ClienteController destroy', $e->getMessage(), $e->getCode());

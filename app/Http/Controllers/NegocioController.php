@@ -6,6 +6,7 @@ use Exception;
 use Throwable;
 use Validator;
 use App\Models\Negocio;
+use App\Models\Publicacion;
 use Illuminate\Http\Request;
 use App\Http\Traits\ResponseApi;
 use Illuminate\Support\Facades\DB;
@@ -157,12 +158,19 @@ class NegocioController extends Controller
     }
 
     //Funcion que borra un elemento en especifico usando su ID, Método DELETE
-    public function destroy($id)
+    public function destroy(Request $request)
     {
         try {
-            $negocio = Negocio::where('id', $id)->first();
+            $negocio = $request->user();
+
+            $publicaciones = Publicacion::where('negocio_id', $negocio->id)->get();
+
+            foreach ($publicaciones as $publicacion) {
+                $publicacion->delete();
+            }
+            
             $negocio->delete();
-            return $this->sendResponse($negocio, 'Response');
+            return $this->sendResponse($negocio, 'Cuenta eliminada');
         } catch (\Exception $e) {
             Log::info($e);
             return $this->sendError('NegocioController destroy', $e->getMessage(), $e->getCode());
