@@ -87,7 +87,6 @@ class ClienteController extends Controller
             $rules = [
                 'nombre' => 'required',
                 'correo' => 'required',
-                'password' => 'required',
                 'telefono' => 'required',
                 'direccion' => 'required',
             ];
