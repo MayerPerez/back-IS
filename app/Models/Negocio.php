@@ -26,10 +26,11 @@ class Negocio extends Authenticatable
         'password',
         'telefono',
         'direccion',
-        'horario',
+        'horario_a',
+        'horario_c',
     ];
 
-   
+
     /**
      * The attributes that should be hidden for arrays.
      *

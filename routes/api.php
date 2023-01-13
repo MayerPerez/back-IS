@@ -42,7 +42,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/negocio/auth', [NegocioController::class, 'authNegocio']);
     Route::put('/negocio', [NegocioController::class, 'updateAuth']);
     Route::resource("/negocio", NegocioController::class)->only([
-        'store', 'update', 'show', 'destroy', 'index'
+        'update', 'show', 'destroy', 'index'
     ]);
     Route::get('/negocio/test/store', [NegocioController::class, 'storeTest']);
     Route::get('/negocio/create/table', [NegocioController::class, 'createTable']);
@@ -76,4 +76,3 @@ Route::middleware('auth:sanctum')->group(function () {
         'store', 'update', 'show', 'destroy'
     ]);
 });
-
