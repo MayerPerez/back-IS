@@ -171,12 +171,50 @@ class PedidoController extends Controller
     }
 
     //Funcion que elimina una fila en especifico usando su ID, Método DELETE
-    public function destroy($id)
+    public function deletePedido(Request $request)
     {
         try {
-            $pedido = Pedido::where('id', $id)->first();
-            $pedido->delete();
-            return $this->sendResponse($pedido, 'Response');
+            $cliente = $request->user();
+            $input = $request->all();
+            $pedido = Pedido::where('id', $input['id'])
+                    ->where('cliente_id', $cliente->id)
+                    ->where('negocio_id', $input['negocio_id'])
+                    ->first();
+            if(empty($pedido)) throw new Exception('Pedido no encontrado', 404);
+            
+            $publicacion = Publicacion::where('id', $pedido->publicacion_id)->first();
+            $publicacion->disponibilidad = strval(intval($publicacion->disponibilidad)+intval($pedido->cantidad));
+            $publicacion->save();
+
+            $pedido->status = 'Cancelado';
+            $pedido->save();
+
+            return $this->sendResponse($pedido, 'Pedido cancelado');
+        } catch (\Exception $e) {
+            Log::info($e);
+            return $this->sendError('PedidoController destroy', $e->getMessage(), $e->getCode());
+        }
+    }
+
+    public function declinePedido(Request $request)
+    {
+        try {
+            $negocio = $request->user();
+            $input = $request->all();
+            $pedido = Pedido::where('id', $input['id'])
+                    ->where('cliente_id', $input['cliente_id'])
+                    ->where('negocio_id', $negocio->id)
+                    ->first();
+            if(empty($pedido)) throw new Exception('Pedido no encontrado', 404);
+            
+            $publicacion = Publicacion::where('id', $pedido->publicacion_id)->first();
+            $publicacion->disponibilidad = strval(intval($publicacion->disponibilidad)+intval($pedido->cantidad));
+            $publicacion->save();
+
+            $pedido->status = 'Rechazado';
+            $pedido->save();
+
+            return $this->sendResponse($pedido, 'Pedido rechazado');
         } catch (\Exception $e) {
             Log::info($e);
             return $this->sendError('PedidoController destroy', $e->getMessage(), $e->getCode());
