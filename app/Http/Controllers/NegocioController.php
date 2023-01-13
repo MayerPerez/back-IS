@@ -35,7 +35,8 @@ class NegocioController extends Controller
                 'password' => 'required',
                 'telefono' => 'required',
                 'direccion' => 'required',
-                'horario' => 'required',
+                'horario_a' => 'required',
+                'horario_c' => 'required',
             ];
 
             $validator = Validator::make($input, $rules);
@@ -63,7 +64,8 @@ class NegocioController extends Controller
                 'password' => 'required',
                 'telefono' => 'required',
                 'direccion' => 'required',
-                'horario' => 'required',
+                'horario_a' => 'required',
+                'horario_c' => 'required',
             ];
 
             $validator = Validator::make($input, $rules);
@@ -93,7 +95,8 @@ class NegocioController extends Controller
                 'correo' => 'required',
                 'telefono' => 'required',
                 'direccion' => 'required',
-                'horario' => 'required',
+                'horario_a' => 'required',
+                'horario_c' => 'required',
             ];
 
             $validator = Validator::make($input, $rules);
@@ -193,7 +196,8 @@ class NegocioController extends Controller
                 $table->string('password');
                 $table->string('telefono');
                 $table->string('direccion');
-                $table->string('horario');
+                $table->string('horario_a');
+                $table->string('horario_c');
                 $table->timestamps();
             });
             return $this->sendResponse(true, 'Tabla creada');
